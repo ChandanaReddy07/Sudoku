@@ -336,10 +336,12 @@ function Gameboard() {
     setResult("");
     setHints(0);
   };
+//solve
 
   return (
-    <div>
+    <div className="parent">
     <div className="main">
+
         {piece.map((index, columns) => {
           return (
             <div className="container" key={columns}>
@@ -347,13 +349,15 @@ function Gameboard() {
                 {piece[columns].map((values, rows) => {
                   return (
                     <div className={`rows${rows}`} key={[columns, rows]}>
-                      <input
+                      <input 
                         id={[columns, rows]}
                         //disables the pieces so the original ones can not be changed
+                        className="cells"
                         disabled={original[rows][columns] !== "" ? true : false}
                         value={piece[rows][columns]}
                         type="text"
                         maxLength="1"
+                        size="4"
                         onKeyDown={(e) => deleteVal(rows, columns, e)}
                         onChange={(e) => handleChange(rows, columns, e)}
                       ></input>
@@ -366,8 +370,8 @@ function Gameboard() {
         })}
       </div>
       <div className="buttonContainer">
-        <button disabled={result === "found" ? true : false} onClick={hint}>
-          Hint
+        <button className="bt1" disabled={result === "found" ? true : false} onClick={hint}>
+          <p >Hint</p>
         </button>
 
         {/* <button
@@ -377,18 +381,18 @@ function Gameboard() {
           Give Up!?
         </button> */}
 
-        <button onClick={reset}>Reset</button>
+        <button  className="bt2" onClick={reset}><p>Reset</p></button>
 
-        <button onClick={newPuzzle}>New Sudoku</button>
+        <button  className="bt3" onClick={newPuzzle}><p>New </p></button>
       </div>
       {/* <h2 className='solved'>{result==='found'?'Solved':null}</h2> */}
-      <h2 className="solved">
+      {/* <h2 className="solved">
         {result === "found"
           ? "Solved"
           : result === "error"
           ? "One of Your Choices is Wrong"
           : null}
-      </h2>
+      </h2> */}
     </div>
   )
 }

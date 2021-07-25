@@ -1,114 +1,117 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@900&family=Press+Start+2P&display=swap');
 
+
+.parent{
+  display: inline-flex;
+
+}
+.buttonContainer{
+  display: grid;
+
+}
 .main{
   
   border: 3px solid black;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
+  grid-template-columns: repeat(9,61px); 
   grid-template-rows: auto;
   justify-content: center;
-  width:80%;
-  margin-left: 9%;
-
+  margin:auto;
+  margin-right: 50px;
+  margin-bottom: 25px;
+  width:615px;
+  /* align-items: center; */
+  height:515px;
+  box-shadow: 2px 2px 9px 2px rgb(0, 0, 0);
+}
+.container{
+  margin-top:1.5px;
+  /* margin-left:3px; */
+  width:60px;
+  height:60px;
+  
+  /* padding:0px; */
+}
+input{
+  height: 50px;
+  width:50px;
 }
 
 .columns3,.columns6{
   border-left: 2px inset black;
-  
+  padding:0px;
 }
 
-.columns8{
+/* .columns8{
   border-right: 2px inset black;
-}
+  
+} */
 
 .rows2,.rows5{
   border-bottom: 2px inset black;
+  margin-bottom:2px ;
+ 
 }
+.rows1,.rows3,.rows4,.rows6,.rows7,.rows8,.rows0{
+  margin-bottom:0px ;
+ 
+}
+
 
 
 .rows0>input, .rows1>input,.rows2>input, .rows3>input, .rows4>input,.rows5>input, .rows6>input, .rows7>input,.rows8>input{
   width: calc(100% - 8px);
+
   color: black;
 }
 
 
 .rows0>input:hover:not(:disabled), .rows1>input:hover:not(:disabled),.rows2>input:hover:not(:disabled), .rows3>input:hover:not(:disabled), .rows4>input:hover:not(:disabled),.rows5>input:hover:not(:disabled), .rows6>input:hover:not(:disabled), .rows7>input:hover:not(:disabled), .rows8>input:hover:not(:disabled){
-  box-shadow: inset 5em 1em	#E4334B;
+  box-shadow: inset 5em 1em	#8bcffc;
 }
 
-.App{
-  margin-top:5%;
-  font-family: 'Cinzel', serif;
-}
+ 
 
-@media only screen and (max-width: 650px) {
-
-  .buttonContainer{
-    margin-top: 2%;
-    margin-left: 9%;
-    display:flex;
-    justify-content: space-around;
-    width:80%;
-    
-  }
-
-  button{
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px 2px black;
-    padding: 2px 8px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: .6em;
-  }
-
-
-  .title{
-    margin-left: 9%;
-    width:80%;
-    text-align: center;
-    font-size: .8em;
-  }
-
-  input{
-    font-size: 1.3em;
-    text-align: center;
-    /* border: 1px solid yellow; */
-    /* box-shadow: inset 2em 2em rgb(356, 356, 356); */
-    /* font-weight: bold; */
-    
-  }
-  
-  input:disabled{
-    font-size: 1.3em;
-    text-align: center;
-    color:#E4334B;
-    background: #CFD5D5;
-    /* width:100%; */
-    /* border: 1px solid yellow; */
-    /* box-shadow: inset 2em 2em rgb(230, 230, 230, .8); */
-    cursor: not-allowed;
-    
-  
-  }
-
-}
-
-@media only screen and (min-width: 651px) {
+@media only screen and (min-width: 400px) {
   .buttonContainer{
     margin-top: 1%;
     margin-left: 9%;
-    display:flex;
+    /* display:flex; */
     justify-content: space-around;
-    width:80%;
+    width: 30px;
+    height:50px ;
+    /* max-width:1000px; */
   }
 
   button{
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px 2px black;
+    border-radius: 6px;
+    box-shadow: 2px 2px 7px 2px black;
     padding: 5px 15px;
     font-family: 'Press Start 2P', cursive;
-    font-size: 1em;
+    font-size:20px;
+    padding:1px;
+    min-width: 180px;
+    margin-top:40px;
   }
+  p{
+    /* padding: 2px; */
+  
+    line-height: 1.5;
+  }
+  .bt1:hover{
+    box-shadow: 2px 2px 7px 2px rgb(104, 25, 150);
+  }
+  .bt2:hover{
+    box-shadow: 2px 2px 7px 2px rgb(238, 31, 93);
+  }
+  .bt3:hover{
+    box-shadow: 2px 2px 7px 2px rgb(33, 114, 47);
+  }
+  .bt1:active,.bt2:active,.bt3:active{
 
+    transform: translateY(2px);
+  }
+  
   .title{
     margin-left: 9%;
     width:80%;
@@ -121,14 +124,15 @@
     font-size: 1.5em;
     text-align: center;
     font-weight: bold;
-    
+    /* min-height: 60px ; */
+   
   }
   
   input:disabled{
     font-size: 1.5em;
     text-align: center;
-    color:#E4334B;
-    background: #CFD5D5;
+    color:#21351c;
+    background: #d6cab2;
   
     cursor: not-allowed;
    
@@ -136,24 +140,25 @@
 }
 
 button:hover:disabled {
+  
   box-shadow: 2px 2px 10px 2px black;
 }
 
-button:hover {
+/* button:hover {
   box-shadow: 2px 2px 10px 2px #E4334B;
-}
+} */
 /* :hover:not(:disabled) */
 
-button:hover:not(:disabled:active) {
+/* button:hover:not(:disabled:active) {
   box-shadow: 2px 2px 10px 2px #E4334B;
-}
+} */
 
-button:active {
+/* button:active {
   
   box-shadow: 2px 2px 10px 10px #E4334B;
   transform: translateY(2px);
 }
-
+ */
 
 
 .solved{
