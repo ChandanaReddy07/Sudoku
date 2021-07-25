@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@900&family=Press+Start+2P&display=swap');
+
+.main{
+  
+  border: 3px solid black;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
+  grid-template-rows: auto;
+  justify-content: center;
+  width:80%;
+  margin-left: 9%;
+
+}
+
+.columns3,.columns6{
+  border-left: 2px inset black;
+  
+}
+
+.columns8{
+  border-right: 2px inset black;
+}
+
+.rows2,.rows5{
+  border-bottom: 2px inset black;
+}
+
+
+.rows0>input, .rows1>input,.rows2>input, .rows3>input, .rows4>input,.rows5>input, .rows6>input, .rows7>input,.rows8>input{
+  width: calc(100% - 8px);
+  color: black;
+}
+
+
+.rows0>input:hover:not(:disabled), .rows1>input:hover:not(:disabled),.rows2>input:hover:not(:disabled), .rows3>input:hover:not(:disabled), .rows4>input:hover:not(:disabled),.rows5>input:hover:not(:disabled), .rows6>input:hover:not(:disabled), .rows7>input:hover:not(:disabled), .rows8>input:hover:not(:disabled){
+  box-shadow: inset 5em 1em	#E4334B;
+}
+
+.App{
+  margin-top:5%;
+  font-family: 'Cinzel', serif;
+}
+
+@media only screen and (max-width: 650px) {
+
+  .buttonContainer{
+    margin-top: 2%;
+    margin-left: 9%;
+    display:flex;
+    justify-content: space-around;
+    width:80%;
+    
+  }
+
+  button{
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px 2px black;
+    padding: 2px 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: .6em;
+  }
+
+
+  .title{
+    margin-left: 9%;
+    width:80%;
+    text-align: center;
+    font-size: .8em;
+  }
+
+  input{
+    font-size: 1.3em;
+    text-align: center;
+    /* border: 1px solid yellow; */
+    /* box-shadow: inset 2em 2em rgb(356, 356, 356); */
+    /* font-weight: bold; */
+    
+  }
+  
+  input:disabled{
+    font-size: 1.3em;
+    text-align: center;
+    color:#E4334B;
+    background: #CFD5D5;
+    /* width:100%; */
+    /* border: 1px solid yellow; */
+    /* box-shadow: inset 2em 2em rgb(230, 230, 230, .8); */
+    cursor: not-allowed;
+    
+  
+  }
+
+}
+
+@media only screen and (min-width: 651px) {
+  .buttonContainer{
+    margin-top: 1%;
+    margin-left: 9%;
+    display:flex;
+    justify-content: space-around;
+    width:80%;
+  }
+
+  button{
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px 2px black;
+    padding: 5px 15px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1em;
+  }
+
+  .title{
+    margin-left: 9%;
+    width:80%;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  input{
+    font-size: 1.5em;
+    text-align: center;
+    font-weight: bold;
+    
+  }
+  
+  input:disabled{
+    font-size: 1.5em;
+    text-align: center;
+    color:#E4334B;
+    background: #CFD5D5;
+  
+    cursor: not-allowed;
+   
+  }
+}
+
+button:hover:disabled {
+  box-shadow: 2px 2px 10px 2px black;
+}
+
+button:hover {
+  box-shadow: 2px 2px 10px 2px #E4334B;
+}
+/* :hover:not(:disabled) */
+
+button:hover:not(:disabled:active) {
+  box-shadow: 2px 2px 10px 2px #E4334B;
+}
+
+button:active {
+  
+  box-shadow: 2px 2px 10px 10px #E4334B;
+  transform: translateY(2px);
+}
+
+
+
+.solved{
+  margin-left: 9%;
+  width:80%;
+  display: flex;
+  justify-content: space-evenly;
+  font-family: 'Cinzel', serif;
+}
