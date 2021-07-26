@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { FaUndoAlt,FaRedoAlt, FaEraser } from 'react-icons/fa';
+import { FaUndoAlt, FaRedoAlt, FaEraser } from "react-icons/fa";
 import EasyPuzzle from "../easy";
 import HardPuzzle from "../hard";
 import MediumPuzzle from "../medium";
@@ -60,16 +60,38 @@ function Gameboard() {
 
   let [undo, setUndo] = useState([]);
   let [redo, setRedo] = useState([]);
-  let [isvalid,setIsvalid]=useState(null);
-  let [active , setActive] =useState(false);
-  let [choosePuzzle,setChoosePuzzle]=useState(EasyPuzzle)
+  let [isvalid, setIsvalid] = useState(null);
+  let [active, setActive] = useState(false);
+  let [choosePuzzle, setChoosePuzzle] = useState(EasyPuzzle);
+
+  const [minutes, setMinutes] = useState(5);
+  const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
     let puzzleChoice =
-    EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
-      console.log(puzzleChoice)
+      EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
+    console.log(puzzleChoice);
     pick(puzzleChoice, false);
   }, []);
+
+  useEffect(() => {
+    let myInterval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(myInterval);
+        } else {
+          setMinutes(minutes - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+    return () => {
+      clearInterval(myInterval);
+    };
+  });
 
   //once board is fully filled out, it will check
   useEffect(() => {
@@ -139,7 +161,7 @@ function Gameboard() {
   //select new puzzle
   const newPuzzle = () => {
     let puzzleChoice =
-    choosePuzzle[Math.floor(Math.random() * (choosePuzzle.length - 0) + 0)];
+      choosePuzzle[Math.floor(Math.random() * (choosePuzzle.length - 0) + 0)];
     pick(puzzleChoice, false);
     setResult("");
     setHints(0);
@@ -337,18 +359,13 @@ function Gameboard() {
           updateOneNumber(currentPosition[0], currentPosition[1], val);
         }, 1000);
 
-        // updateOneNumber(currentPosition[0],currentPosition[1],val)
         if (solve(copy, false)) {
           //now that we updated the value, we are rerunning solve , but now it is incremented till next '' cell
           return true;
         }
 
-        // board[currentPosition[0]][currentPosition[1]]='';
-        // updateOneNumber(currentPosition[0],currentPosition[1],'')
       }
     }
-
-    // // updateOneNumber(currentPosition[0],currentPosition[1],'')
 
     board[currentPosition[0]][currentPosition[1]] = "";
     // //created a timeout to provide the illusion of calculations
@@ -366,13 +383,12 @@ function Gameboard() {
   const updateOneNumber = (row, col, val) => {
     let copy = [...piece];
     copy[row][col] = val;
-    
+
     let undoob = {
       row: row,
       col: col,
       val: val,
     };
-   
 
     setUndo([...undo, undoob]);
     return setPiece(copy);
@@ -381,7 +397,7 @@ function Gameboard() {
   const onChoosePuzzle = (name) => {
     setChoosePuzzle(name);
     newPuzzle();
-  }
+  };
   const handleChange = (row, column, e) => {
     let key = e.target.value;
     setActive(true);
@@ -391,10 +407,9 @@ function Gameboard() {
       let validated = validate(row, column, val);
 
       if (!validated) {
-         e.preventDefault();
-         setIsvalid(false)
-         console.log(active)
-         
+        e.preventDefault();
+        setIsvalid(false);
+        console.log(active);
       } else {
         let copy = [...piece];
         copy[row][column] = Number(val);
@@ -404,37 +419,34 @@ function Gameboard() {
           col: column,
           val: val,
         };
-        setIsvalid(true)
+        setIsvalid(true);
 
         setUndo([...undo, undoob]);
-        // setUndoOb({...undoOb,
-        //   row:"",
-        //   col:"",
-        //   val:""
-        // })
+      
         console.log("undo", undo);
-        console.log(active)
+        console.log(active);
       }
     } else {
       e.preventDefault();
-      setIsvalid(false)
+      setIsvalid(false);
     }
-    // setActive(false);
+   
   };
   const reset = () => {
     pick(original, true);
     setResult("");
     setHints(0);
   };
-  
+
   //undoo
   const undoo = () => {
     if (undo.length > 0) {
-    let obj = undo.pop();
-    let copy = [...piece];
-    copy[obj.row][obj.col] = "";
-    setPiece(copy);
-    setRedo([...redo, obj]);}
+      let obj = undo.pop();
+      let copy = [...piece];
+      copy[obj.row][obj.col] = "";
+      setPiece(copy);
+      setRedo([...redo, obj]);
+    }
   };
   const redoo = () => {
     if (redo.length > 0) {
@@ -446,97 +458,111 @@ function Gameboard() {
     }
   };
   //solve
-  
 
   return (
     <div>
-    <div className="parent">
-    <div className="buttonContainer10">
-     
-        <button className="btn10 easy"  onClick={()=> (onChoosePuzzle(EasyPuzzle))}>
-          <p>EASY</p>
-        </button>
-        <button  className="btn10 med"  onClick={()=> (onChoosePuzzle(MediumPuzzle))} >
-          <p>MEDIUM</p>
-        </button>
-        <button  className="btn10 hard" onClick={()=> (onChoosePuzzle(HardPuzzle))}>
-          <p>HARD</p>
-        </button>
-        <button className="btn10 new" onClick={newPuzzle}>
-          <p>New </p>
-        </button>
+      {/* <div>
+        {minutes === 0 && seconds === 0 ? (
+          <h1>GAME OVER</h1>
+        ) : (
+          <h1>
+            {" "}
+            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+          </h1>
+        )}
+      </div> */}
+      <div className="parent">
+        <div className="buttonContainer10">
+          <button
+            className="btn10 easy"
+            onClick={() => onChoosePuzzle(EasyPuzzle)}
+          >
+            <p>EASY</p>
+          </button>
+          <button
+            className="btn10 med"
+            onClick={() => onChoosePuzzle(MediumPuzzle)}
+          >
+            <p>MEDIUM</p>
+          </button>
+          <button
+            className="btn10 hard"
+            onClick={() => onChoosePuzzle(HardPuzzle)}
+          >
+            <p>HARD</p>
+          </button>
+          <button className="btn10 new" onClick={newPuzzle}>
+            <p>New </p>
+          </button>
         </div>
-      <div className="main">
-        {piece.map((index, columns) => {
-          return (
-            <div className="container" key={columns}>
-              <form className= {`columns${columns}`}>
-                {piece[columns].map((values, rows) => {
-                  return (
-                    <div className={ `rows${rows}`} key={[columns, rows]}>
-                      <input
-                        id={[columns, rows]}
-                        //disables the pieces so the original ones can not be changed
-                        className={isvalid ? "cell" : "err_cell"}
-                        disabled={original[rows][columns] !== "" ? true : false}
-                        value={piece[rows][columns]}
-                        type="text"
-                        maxLength="1"
-                        size="4"
-                        onKeyDown={(e) => deleteVal(rows, columns, e)}
-                        onChange={(e) => handleChange(rows, columns, e)}
-                        
-                      ></input>
-                    </div>
-                  );
-                })}
-              </form>
-            </div>
-          );
-        })}
-      </div>
-      <div className="buttonContainer">
-      <div className="undo_redo">
-        <p className="undo" onClick={undoo}>
-          <FaUndoAlt/>
-        </p>
-        <p className="redo" onClick={redoo}>
-          <FaRedoAlt/>
-        </p>
-       </div>
-        <button
-          className="bt1"
-          disabled={result === "found" ? true : false}
-          onClick={hint}
-        >
-          <p>Hint</p>
-        </button>
+        <div className="main">
+          {piece.map((index, columns) => {
+            return (
+              <div className="container" key={columns}>
+                <form className={`columns${columns}`}>
+                  {piece[columns].map((values, rows) => {
+                    return (
+                      <div className={`rows${rows}`} key={[columns, rows]}>
+                        <input
+                          id={[columns, rows]}
+                          //disables the pieces so the original ones can not be changed
+                          className={isvalid ? "cell" : "err_cell"}
+                          disabled={
+                            original[rows][columns] !== "" ? true : false
+                          }
+                          value={piece[rows][columns]}
+                          type="text"
+                          maxLength="1"
+                          size="4"
+                          onKeyDown={(e) => deleteVal(rows, columns, e)}
+                          onChange={(e) => handleChange(rows, columns, e)}
+                        ></input>
+                      </div>
+                    );
+                  })}
+                </form>
+              </div>
+            );
+          })}
+        </div>
+        <div className="buttonContainer">
+          <div className="undo_redo">
+            <p className="undo" onClick={undoo}>
+              <FaUndoAlt />
+            </p>
+            <p className="redo" onClick={redoo}>
+              <FaRedoAlt />
+            </p>
+          </div>
+          <button
+            className="bt1"
+            disabled={result === "found" ? true : false}
+            onClick={hint}
+          >
+            <p>Hint</p>
+          </button>
 
-        <button
-          className="bt2"
-          disabled={result === "found"}
-          onClick={() => solve(piece, false)}
-        >
-        <p> Solve!</p>
-        </button>
+          <button
+            className="bt2"
+            disabled={result === "found"}
+            onClick={() => solve(piece, false)}
+          >
+            <p> Solve!</p>
+          </button>
 
-        <button className="bt3" onClick={reset}>
-          <p>Reset</p>
-        </button>
-
-       
-       
-      </div>
+          <button className="bt3" onClick={reset}>
+            <p>Reset</p>
+          </button>
+        </div>
       </div>
 
-       {/* <h2 className='solved'>{result==='found'?'Solved':null}</h2>  */}
-       <h2 className="solved">
+      <h2 className="solved">
         {result === "found"
           ? "Solved"
           : result === "error"
           ? "One of Your Choices is Wrong"
           : null}
-      </h2> 
+      </h2>
     </div>
   );
 }

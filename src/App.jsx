@@ -2,15 +2,12 @@
 import './App.css';
 import Gameboard from './component/gameboard';
 import React, { useState, useEffect } from "react";
-import Start from './component/start';
-window.gridHistory=window.gridHistory||[]
+
+
 
 
 function App() {
  
-
-  var [level,setLevel]=useState(null)
-  var [start,setStart]=useState(false)
 
   
  
@@ -23,7 +20,7 @@ function App() {
       &nbsp;SUDOKU&nbsp;GAME&nbsp;
     </p>
    <Gameboard/>
-    
+  
    
     </div>
   );
