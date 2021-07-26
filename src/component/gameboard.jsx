@@ -453,16 +453,16 @@ function Gameboard() {
     <div className="parent">
     <div className="buttonContainer10">
      
-        <button className="btn10"  onClick={()=> (onChoosePuzzle(EasyPuzzle))}>
+        <button className="btn10 easy"  onClick={()=> (onChoosePuzzle(EasyPuzzle))}>
           <p>EASY</p>
         </button>
-        <button  className="btn10"  onClick={()=> (onChoosePuzzle(MediumPuzzle))} >
+        <button  className="btn10 med"  onClick={()=> (onChoosePuzzle(MediumPuzzle))} >
           <p>MEDIUM</p>
         </button>
-        <button  className="btn10" onClick={()=> (onChoosePuzzle(HardPuzzle))}>
+        <button  className="btn10 hard" onClick={()=> (onChoosePuzzle(HardPuzzle))}>
           <p>HARD</p>
         </button>
-        <button className="btn10" onClick={newPuzzle}>
+        <button className="btn10 new" onClick={newPuzzle}>
           <p>New </p>
         </button>
         </div>
