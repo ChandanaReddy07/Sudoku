@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaUndoAlt,FaRedoAlt, FaEraser } from 'react-icons/fa';
 import EasyPuzzle from "../easy";
 import HardPuzzle from "../hard";
+import MediumPuzzle from "../medium";
 
 import "./game.css";
 
@@ -60,11 +61,12 @@ function Gameboard() {
   let [undo, setUndo] = useState([]);
   let [redo, setRedo] = useState([]);
   let [isvalid,setIsvalid]=useState(null);
-  let [active , setActive] =useState(false)
+  let [active , setActive] =useState(false);
+  let [choosePuzzle,setChoosePuzzle]=useState(EasyPuzzle)
 
   useEffect(() => {
     let puzzleChoice =
-      EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
+    EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
       console.log(puzzleChoice)
     pick(puzzleChoice, false);
   }, []);
@@ -137,7 +139,7 @@ function Gameboard() {
   //select new puzzle
   const newPuzzle = () => {
     let puzzleChoice =
-      EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
+    choosePuzzle[Math.floor(Math.random() * (choosePuzzle.length - 0) + 0)];
     pick(puzzleChoice, false);
     setResult("");
     setHints(0);
@@ -364,9 +366,22 @@ function Gameboard() {
   const updateOneNumber = (row, col, val) => {
     let copy = [...piece];
     copy[row][col] = val;
+    
+    let undoob = {
+      row: row,
+      col: col,
+      val: val,
+    };
+   
+
+    setUndo([...undo, undoob]);
     return setPiece(copy);
   };
 
+  const onChoosePuzzle = (name) => {
+    setChoosePuzzle(name);
+    newPuzzle();
+  }
   const handleChange = (row, column, e) => {
     let key = e.target.value;
     setActive(true);
@@ -436,7 +451,21 @@ function Gameboard() {
   return (
     <div>
     <div className="parent">
-      
+    <div className="buttonContainer10">
+     
+        <button className="btn10"  onClick={()=> (onChoosePuzzle(EasyPuzzle))}>
+          <p>EASY</p>
+        </button>
+        <button  className="btn10"  onClick={()=> (onChoosePuzzle(MediumPuzzle))} >
+          <p>MEDIUM</p>
+        </button>
+        <button  className="btn10" onClick={()=> (onChoosePuzzle(HardPuzzle))}>
+          <p>HARD</p>
+        </button>
+        <button className="btn10" onClick={newPuzzle}>
+          <p>New </p>
+        </button>
+        </div>
       <div className="main">
         {piece.map((index, columns) => {
           return (
@@ -495,9 +524,7 @@ function Gameboard() {
           <p>Reset</p>
         </button>
 
-        <button className="bt4" onClick={newPuzzle}>
-          <p>New </p>
-        </button>
+       
        
       </div>
       </div>

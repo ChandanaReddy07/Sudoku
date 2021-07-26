@@ -1,24 +1,30 @@
 
 import './App.css';
 import Gameboard from './component/gameboard';
-
+import React, { useState, useEffect } from "react";
+import Start from './component/start';
 window.gridHistory=window.gridHistory||[]
 
 
 function App() {
  
+
+  var [level,setLevel]=useState(null)
+  var [start,setStart]=useState(false)
+
   
-  var x=Array.from({length: 9},()=> Array.from({length: 9}, () => '1'))
+ 
   return (
+
+
     <div className="App" >
-     
     
     <p className="title1" style={{fontSize: "40px"}}>
       &nbsp;SUDOKU&nbsp;GAME&nbsp;
     </p>
-    <Gameboard/>
+   <Gameboard/>
+    
    
-
     </div>
   );
 }
