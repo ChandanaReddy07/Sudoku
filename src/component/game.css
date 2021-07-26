@@ -3,6 +3,8 @@
 
 .parent{
   display: inline-flex;
+ 
+  justify-content: center;
 
 }
 .buttonContainer{
@@ -29,8 +31,28 @@
   /* margin-left:3px; */
   width:60px;
   height:60px;
+
   
   /* padding:0px; */
+}
+.undo, .redo{
+  font-size: 50px;
+  color: bisque;
+  margin-left: 20px;
+  margin-right: 10px;
+
+
+}
+.undo:active , .redo:active{
+  color: rgb(247, 105, 124);
+  text-shadow: 0 0 30px #fff, 0 0 70px #fff, 0 0 50px #fff;
+  transform: translateY(3px);
+
+}
+.undo_redo{
+  display: inline-flex;
+  margin-bottom: -60px;
+  margin-top: -40px;
 }
 input{
   height: 50px;
@@ -67,31 +89,34 @@ input{
 
 
 .rows0>input:hover:not(:disabled), .rows1>input:hover:not(:disabled),.rows2>input:hover:not(:disabled), .rows3>input:hover:not(:disabled), .rows4>input:hover:not(:disabled),.rows5>input:hover:not(:disabled), .rows6>input:hover:not(:disabled), .rows7>input:hover:not(:disabled), .rows8>input:hover:not(:disabled){
-  box-shadow: inset 5em 1em	#8bcffc;
+  box-shadow: inset 5em 1em	#4b8fc0;
 }
-
- 
+/* .columns0, .columns1>input:hover:not(:disabled),.columns2>input:hover:not(:disabled), .columns3>input:hover:not(:disabled), .columns4>input:hover:not(:disabled),.columns5>input:hover:not(:disabled), .columns6>input:hover:not(:disabled), .columns7>input:hover:not(:disabled), .columns8>input:hover:not(:disabled){
+  box-shadow: inset 5em 1em	#4b8fc0;
+}
+  */
 
 @media only screen and (min-width: 400px) {
   .buttonContainer{
-    margin-top: 1%;
+    /* margin-top: 1%; */
     margin-left: 9%;
     /* display:flex; */
     justify-content: space-around;
     width: 30px;
-    height:50px ;
+    /* height:50px ; */
     /* max-width:1000px; */
   }
 
   button{
     border-radius: 6px;
     box-shadow: 2px 2px 7px 2px black;
-    padding: 5px 15px;
+    /* padding: 5px 15px; */
     font-family: 'Press Start 2P', cursive;
     font-size:20px;
-    padding:1px;
+    /* padding:1px; */
     min-width: 180px;
-    margin-top:40px;
+    max-height: 70px;
+    margin-top:5px;
   }
   p{
     /* padding: 2px; */
@@ -127,15 +152,20 @@ input{
     /* min-height: 60px ; */
    
   }
+  /* .cell{
+    background-color: lawngreen;
+  }
+  .err_cell{
+    background-color: rgb(241, 15, 128);
+  }
+   */
   
   input:disabled{
     font-size: 1.5em;
     text-align: center;
     color:#21351c;
     background: #d6cab2;
-  
     cursor: not-allowed;
-   
   }
 }
 
@@ -160,11 +190,14 @@ button:hover:disabled {
 }
  */
 
-
+#columns1:hover{
+  background-color: rgb(228, 61, 61);
+}
 .solved{
-  margin-left: 9%;
-  width:80%;
-  display: flex;
-  justify-content: space-evenly;
-  font-family: 'Cinzel', serif;
+  font-family: 'Press Start 2P', cursive;
+ color: #fff;
+ text-align: center;
+ transition: 0.5s;
+ font-size: 40px;
+ text-shadow:8px 8px  rgb(54, 13, 40);
 }

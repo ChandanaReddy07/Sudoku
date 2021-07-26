@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Puzzles from "../Puzzles";
+
+import { FaUndoAlt,FaRedoAlt, FaEraser } from 'react-icons/fa';
+import EasyPuzzle from "../easy";
+import HardPuzzle from "../hard";
 
 import "./game.css";
 
@@ -53,12 +56,16 @@ function Gameboard() {
   let original =
     JSON.parse(window.localStorage.getItem("original")) ||
     [...Array(9)].map((x) => Array(9).fill("1")); //will hold the original sudoku board for reseting purposes
-  JSON.parse(window.localStorage.getItem("original")) ||
-    [...Array(9)].map((x) => Array(9).fill("1")); //will hold the original sudoku board for reseting purposes
+
+  let [undo, setUndo] = useState([]);
+  let [redo, setRedo] = useState([]);
+  let [isvalid,setIsvalid]=useState(null);
+  let [active , setActive] =useState(false)
 
   useEffect(() => {
     let puzzleChoice =
-      Puzzles[Math.floor(Math.random() * (Puzzles.length - 0) + 0)];
+      EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
+      console.log(puzzleChoice)
     pick(puzzleChoice, false);
   }, []);
 
@@ -130,7 +137,7 @@ function Gameboard() {
   //select new puzzle
   const newPuzzle = () => {
     let puzzleChoice =
-      Puzzles[Math.floor(Math.random() * (Puzzles.length - 0) + 0)];
+      EasyPuzzle[Math.floor(Math.random() * (EasyPuzzle.length - 0) + 0)];
     pick(puzzleChoice, false);
     setResult("");
     setHints(0);
@@ -305,6 +312,54 @@ function Gameboard() {
       return setResult("found");
     }
   };
+  //solve
+  function solve(board, errors) {
+    let currentPosition = findEmpty(board);
+    //base case where the sudoku board has everything filled out correctly
+    if (currentPosition === null) {
+      //created a timeout to provide the illusion of calculations
+      setTimeout(() => {
+        setResult("found");
+        setHints(0);
+      }, 1400);
+
+      return true;
+    }
+
+    for (let val = 1; val <= 9; val++) {
+      if (validate(currentPosition[0], currentPosition[1], val)) {
+        let copy = [...board];
+        copy[currentPosition[0]][currentPosition[1]] = val;
+        //created a timeout to provide the illusion of calculations
+        setTimeout(() => {
+          updateOneNumber(currentPosition[0], currentPosition[1], val);
+        }, 1000);
+
+        // updateOneNumber(currentPosition[0],currentPosition[1],val)
+        if (solve(copy, false)) {
+          //now that we updated the value, we are rerunning solve , but now it is incremented till next '' cell
+          return true;
+        }
+
+        // board[currentPosition[0]][currentPosition[1]]='';
+        // updateOneNumber(currentPosition[0],currentPosition[1],'')
+      }
+    }
+
+    // // updateOneNumber(currentPosition[0],currentPosition[1],'')
+
+    board[currentPosition[0]][currentPosition[1]] = "";
+    // //created a timeout to provide the illusion of calculations
+    setTimeout(() => {
+      updateOneNumber(currentPosition[0], currentPosition[1], "");
+    }, 1000);
+
+    setTimeout(() => {
+      setResult("error");
+    }, 1400);
+
+    return false;
+  }
   //updates oneNumber at a time
   const updateOneNumber = (row, col, val) => {
     let copy = [...piece];
@@ -314,45 +369,86 @@ function Gameboard() {
 
   const handleChange = (row, column, e) => {
     let key = e.target.value;
-
+    setActive(true);
     let regex = "^([1-9])$";
     if (key.match(regex)) {
       let val = Number(key);
       let validated = validate(row, column, val);
 
       if (!validated) {
-        e.preventDefault();
+         e.preventDefault();
+         setIsvalid(false)
+         console.log(active)
+         
       } else {
         let copy = [...piece];
         copy[row][column] = Number(val);
         setPiece(copy);
+        let undoob = {
+          row: row,
+          col: column,
+          val: val,
+        };
+        setIsvalid(true)
+
+        setUndo([...undo, undoob]);
+        // setUndoOb({...undoOb,
+        //   row:"",
+        //   col:"",
+        //   val:""
+        // })
+        console.log("undo", undo);
+        console.log(active)
       }
     } else {
       e.preventDefault();
+      setIsvalid(false)
     }
+    // setActive(false);
   };
   const reset = () => {
     pick(original, true);
     setResult("");
     setHints(0);
   };
-//solve
+  
+  //undoo
+  const undoo = () => {
+    if (undo.length > 0) {
+    let obj = undo.pop();
+    let copy = [...piece];
+    copy[obj.row][obj.col] = "";
+    setPiece(copy);
+    setRedo([...redo, obj]);}
+  };
+  const redoo = () => {
+    if (redo.length > 0) {
+      let obj = redo.pop();
+      let copy = [...piece];
+      copy[obj.row][obj.col] = Number(obj.val);
+      setPiece(copy);
+      setUndo([...undo, obj]);
+    }
+  };
+  //solve
+  
 
   return (
+    <div>
     <div className="parent">
-    <div className="main">
-
+      
+      <div className="main">
         {piece.map((index, columns) => {
           return (
             <div className="container" key={columns}>
-              <form className={`columns${columns}`}>
+              <form className= {`columns${columns}`}>
                 {piece[columns].map((values, rows) => {
                   return (
-                    <div className={`rows${rows}`} key={[columns, rows]}>
-                      <input 
+                    <div className={ `rows${rows}`} key={[columns, rows]}>
+                      <input
                         id={[columns, rows]}
                         //disables the pieces so the original ones can not be changed
-                        className="cells"
+                        className={isvalid ? "cell" : "err_cell"}
                         disabled={original[rows][columns] !== "" ? true : false}
                         value={piece[rows][columns]}
                         type="text"
@@ -360,6 +456,7 @@ function Gameboard() {
                         size="4"
                         onKeyDown={(e) => deleteVal(rows, columns, e)}
                         onChange={(e) => handleChange(rows, columns, e)}
+                        
                       ></input>
                     </div>
                   );
@@ -370,30 +467,50 @@ function Gameboard() {
         })}
       </div>
       <div className="buttonContainer">
-        <button className="bt1" disabled={result === "found" ? true : false} onClick={hint}>
-          <p >Hint</p>
+      <div className="undo_redo">
+        <p className="undo" onClick={undoo}>
+          <FaUndoAlt/>
+        </p>
+        <p className="redo" onClick={redoo}>
+          <FaRedoAlt/>
+        </p>
+       </div>
+        <button
+          className="bt1"
+          disabled={result === "found" ? true : false}
+          onClick={hint}
+        >
+          <p>Hint</p>
         </button>
 
-        {/* <button
-          disabled={result === "found" || hints < 4 ? true : false}
+        <button
+          className="bt2"
+          disabled={result === "found"}
           onClick={() => solve(piece, false)}
         >
-          Give Up!?
-        </button> */}
+        <p> Solve!</p>
+        </button>
 
-        <button  className="bt2" onClick={reset}><p>Reset</p></button>
+        <button className="bt3" onClick={reset}>
+          <p>Reset</p>
+        </button>
 
-        <button  className="bt3" onClick={newPuzzle}><p>New </p></button>
+        <button className="bt4" onClick={newPuzzle}>
+          <p>New </p>
+        </button>
+       
       </div>
-      {/* <h2 className='solved'>{result==='found'?'Solved':null}</h2> */}
-      {/* <h2 className="solved">
+      </div>
+
+       {/* <h2 className='solved'>{result==='found'?'Solved':null}</h2>  */}
+       <h2 className="solved">
         {result === "found"
           ? "Solved"
           : result === "error"
           ? "One of Your Choices is Wrong"
           : null}
-      </h2> */}
+      </h2> 
     </div>
-  )
+  );
 }
 export default Gameboard;
